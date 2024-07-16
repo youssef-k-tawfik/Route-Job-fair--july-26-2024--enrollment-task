@@ -652,10 +652,6 @@ video {
   cursor: pointer;
 }
 
-.flex-col {
-  flex-direction: column;
-}
-
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -746,9 +742,33 @@ video {
   font-weight: 600;
 }
 
+.text-\[\#472a6c\] {
+  --tw-text-opacity: 1;
+  color: rgb(71 42 108 / var(--tw-text-opacity));
+}
+
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+.text-\[\#a762ff\] {
+  --tw-text-opacity: 1;
+  color: rgb(167 98 255 / var(--tw-text-opacity));
+}
+
+.text-\[\#05ae6b\] {
+  --tw-text-opacity: 1;
+  color: rgb(5 174 107 / var(--tw-text-opacity));
+}
+
+.text-\[\#07fa9a\] {
+  --tw-text-opacity: 1;
+  color: rgb(7 250 154 / var(--tw-text-opacity));
+}
+
+.text-\[\#\] {
+  color: #;
 }
 
 .filter {
@@ -916,10 +936,6 @@ tbody tr:nth-child(odd):where(.dark, .dark *) {
   .sm\:block {
     display: block;
   }
-
-  .sm\:flex-row {
-    flex-direction: row;
-  }
 }
 
 .peer:checked ~ .rtl\:peer-checked\:after\:-translate-x-full:where([dir="rtl"], [dir="rtl"] *)::after {
@@ -950,4 +966,9 @@ tbody tr:nth-child(odd):where(.dark, .dark *) {
 .dark\:text-gray-300:where(.dark, .dark *) {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
+}
+
+.dark\:text-\[\#07fa9a\]:where(.dark, .dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(7 250 154 / var(--tw-text-opacity));
 }
