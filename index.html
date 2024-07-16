@@ -1,0 +1,136 @@
+<!-- 
+  Route job fair July 26, 2024 enrollment task
+  Task: https://drive.google.com/file/d/1HuPPfaiHchLyG9t3gPrvHYxbwoRN6jCv/view?usp=drive_link
+-->
+<!-- 
+  Name      : Youssef Khaled Salaheldin Tawfik
+  Status    : still enrolled in Route's front-end diploma (just finished JavaScript)
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="./dist/css/all.min.css" />
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="./dist/css/main.css" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      href="./dist/images/favicon.ico"
+      type="image/x-icon"
+    />
+    <title>Transactions</title>
+  </head>
+  <body
+    class="min-h-screen p-5 text-center bg-light-gradient dark:bg-dark-gradient text-gray-900"
+  >
+    <div id="darkModeToggler" class="absolute start-4 top-4">
+      <label class="inline-flex items-center cursor-pointer">
+        <input
+          id="darkModeCheckBox"
+          type="checkbox"
+          checked
+          class="sr-only peer"
+        />
+        <div
+          class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#2a2a2a]"
+        ></div>
+        <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"
+          >Dark mode</span
+        >
+      </label>
+    </div>
+    <div class="container mx-auto !max-w-[800px]">
+      <h1 class="ui-container mb-5 text-4xl font-semibold w-fit mx-auto">
+        Transactions
+      </h1>
+      <div id="filterInputs" class="ui-container mb-2">
+        <div class="mb-5">
+          <label
+            for="customerNameFilterInput"
+            class="text-start block mb-2 text-lg font-medium"
+            >Filter by Customer Name</label
+          >
+          <input
+            type="text"
+            id="customerNameFilterInput"
+            class="bg-gray-50 dark:bg-[#3c3c3c] border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="John Doe"
+          />
+        </div>
+        <h2 class="text-start mb-2 text-lg font-medium">Filter by Amount</h2>
+        <div class="flex gap-3">
+          <div id="amountStartInputContainer">
+            <label for="minAmountInput">From</label>
+            <input
+              type="number"
+              id="minAmountInput"
+              class="bg-gray-50 dark:bg-[#3c3c3c] border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1"
+              placeholder="0"
+            />
+          </div>
+          <div id="amountEndInputContainer">
+            <label for="maxAmountInput">To</label>
+            <input
+              type="number"
+              id="maxAmountInput"
+              class="bg-gray-50 dark:bg-[#3c3c3c] border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1"
+              placeholder="0"
+            />
+          </div>
+        </div>
+      </div>
+      <div id="tableContainer" class="ui-container w-fit mx-auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ! generated transaction
+            <tr>
+              <td>#1</td>
+              <td>Senna</td>
+              <td>2004-03-09</td>
+              <td>&dollar;250</td>
+            </tr>
+            ! -->
+          </tbody>
+        </table>
+      </div>
+      <div id="graphContainer" class="ui-container mt-2">
+        <div id="selectUserContainer">
+          <label
+            for="selectedUserSelect"
+            class="mb-2 block text-center text-lg font-medium"
+            >Display the total transaction amount per day for the selected
+            customer</label
+          >
+          <select
+            id="selectedUserSelect"
+            class="block dark:bg-[#3c3c3c] mx-auto bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1"
+          >
+            <option selected hidden>Choose a user</option>
+            <!-- ! Generated option
+            <option value="${customerName}">${customerName}</option>
+            ! -->
+          </select>
+        </div>
+        <div>
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <!--  & Scripts & -->
+    <script src="./dist/js/jquery-3.7.1.min.js"></script>
+    <script src="./dist/js/chart-4.4.3.js"></script>
+    <script type="module" src="./dist/js/main.js"></script>
+  </body>
+</html>

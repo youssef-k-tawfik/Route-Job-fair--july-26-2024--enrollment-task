@@ -1,0 +1,4 @@
+node_modules/
+pachage-lock.json
+tailwind.config.js
+src/
