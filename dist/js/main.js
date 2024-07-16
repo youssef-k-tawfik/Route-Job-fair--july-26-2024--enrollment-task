@@ -6,7 +6,7 @@ let lowestAmount = Infinity;
 let highestAmount = -Infinity;
 
 // & Fetch and display transactions & //
-fetch("../../db.json")
+fetch("db.json")
   .then((res) => res.json())
   .then((data) => {
     // * customers
