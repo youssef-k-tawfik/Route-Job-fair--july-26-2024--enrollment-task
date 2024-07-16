@@ -24,9 +24,9 @@
     <title>Transactions</title>
   </head>
   <body
-    class="min-h-screen p-5 text-center bg-light-gradient dark:bg-dark-gradient text-gray-900"
+    class="min-h-screen px-1 py-4 text-center bg-light-gradient dark:bg-dark-gradient text-gray-900"
   >
-    <div id="darkModeToggler" class="absolute start-4 top-4">
+    <div id="darkModeToggler" class="absolute start-1 top-1">
       <label class="inline-flex items-center cursor-pointer">
         <input
           id="darkModeCheckBox"
@@ -44,14 +44,19 @@
       </label>
     </div>
     <div class="container mx-auto !max-w-[800px]">
-      <h1 class="ui-container mb-5 text-4xl font-semibold w-fit mx-auto">
-        <i class="fa-solid fa-money-bill-transfer text-[#05ae6b] dark:text-[#07fa9a]"></i> Transactions
+      <h1
+        class="ui-container mb-5 text-2xl sm:text-4xl font-semibold w-fit mx-auto"
+      >
+        <i
+          class="fa-solid fa-money-bill-transfer text-[#05ae6b] dark:text-[#07fa9a]"
+        ></i>
+        Transactions
       </h1>
       <div id="filterInputs" class="ui-container mb-2">
         <div class="mb-5">
           <label
             for="customerNameFilterInput"
-            class="text-start block mb-2 text-lg font-medium"
+            class="text-start block mb-2 sm:text-lg font-medium"
             >Filter by Customer Name</label
           >
           <input
@@ -61,7 +66,7 @@
             placeholder="John Doe"
           />
         </div>
-        <h2 class="text-start mb-2 text-lg font-medium">Filter by Amount</h2>
+        <h2 class="text-start mb-2 sm:text-lg font-medium">Filter by Amount</h2>
         <div class="flex flex-wrap gap-3">
           <div id="amountStartInputContainer">
             <label for="minAmountInput">From</label>
@@ -84,7 +89,7 @@
         </div>
       </div>
       <div id="tableContainer" class="ui-container w-fit mx-auto">
-        <table>
+        <table class="text-sm sm:text-base">
           <thead>
             <tr>
               <th>Transaction ID</th>
