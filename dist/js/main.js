@@ -16,32 +16,28 @@ fetch("db.json")
 
     // * Create Transactions List to display
     responseTransactions.forEach(({ id, customer_id, date, amount }) => {
+      lowestAmount = lowestAmount > amount ? amount : lowestAmount;
+      $("#minAmountInput").val(lowestAmount);
+      highestAmount = highestAmount < amount ? amount : highestAmount;
+      $("#maxAmountInput").val(highestAmount);
+
       // * get customer name
       const customer = listCustomers.find(({ id }) => id === customer_id);
       const customerName = customer.name;
       listTransactions.push(new Transaction(id, customerName, date, amount));
     });
-    displayTransactions(listTransactions);
-
-    // * setting the amount filter
-    $("#minAmountInput").val(lowestAmount);
-    $("#minAmountInput").attr("min", lowestAmount);
-    $("#minAmountInput").attr("max", highestAmount - 1);
-
-    $("#maxAmountInput").val(highestAmount);
-    $("#maxAmountInput").attr("min", lowestAmount + 1);
-    $("#maxAmountInput").attr("max", highestAmount);
+    displayTransactionsByName(listTransactions);
 
     // * list customers in select element
     const defaultOption = "<option selected hidden>Choose a user</option>";
-    $("#selectedUserSelect").html(defaultOption);
 
-    listCustomers.forEach(({ name }) => {
-      $("#selectedUserSelect").html(
-        $("#selectedUserSelect").html() + generateCustomerOption(name)
-      );
-    });
-  });
+    const otherOptions = listCustomers
+      .map(({ name }) => generateCustomerOption(name))
+      .join("");
+
+    $("#selectedUserSelect").html(defaultOption + otherOptions);
+  })
+  .catch((error) => console.error("Error: ", error));
 
 function generateTransaction({ id, customerName, date, amount }) {
   return `
@@ -54,50 +50,101 @@ function generateTransaction({ id, customerName, date, amount }) {
   `;
 }
 
-function displayTransactions(listTransactions) {
-  $("tbody").html("");
-  listTransactions.forEach((transaction) => {
-    // * display transactions
-    $("tbody").html($("tbody").html() + generateTransaction(transaction));
+function filterTransactionsByAmount() {
+  const inputValue = $("#customerNameFilterInput").val().toLowerCase();
+  const minValue = parseFloat($("#minAmountInput").val());
+  const maxValue = parseFloat($("#maxAmountInput").val());
 
-    // * get lowest and highest amount
-    lowestAmount = Math.min(lowestAmount, transaction.amount);
-    highestAmount = Math.max(highestAmount, transaction.amount);
+  $("#btnClearFilter").attr("disabled", false);
+
+  const filteredTransactions = listTransactions.filter(
+    ({ customerName, amount }) =>
+      customerName.toLowerCase().includes(inputValue) &&
+      amount >= minValue &&
+      amount <= maxValue
+  );
+
+  displayTransactionsByAmount(filteredTransactions);
+}
+
+function displayTransactionsByName(listTransactions) {
+  const tbodyContent = listTransactions
+    .map((transaction) => generateTransaction(transaction))
+    .join("");
+  $("tbody").html(tbodyContent);
+
+  let currentLowestAmount = Infinity;
+  let currentHighestAmount = -Infinity;
+  listTransactions.forEach(({ amount }) => {
+    currentLowestAmount = Math.min(currentLowestAmount, amount);
+    currentHighestAmount = Math.max(currentHighestAmount, amount);
   });
+
+  $("#minAmountInput")
+    .attr("min", currentLowestAmount)
+    .val(currentLowestAmount);
+  $("#maxAmountInput")
+    .attr("max", currentHighestAmount)
+    .val(currentHighestAmount);
+}
+
+function displayTransactionsByAmount(listTransactions) {
+  const tbodyContent = listTransactions
+    .map((transaction) => generateTransaction(transaction))
+    .join("");
+  $("tbody").html(tbodyContent);
 }
 
 // & Filter Table & //
 
 // * Filter with customer name
 $("#customerNameFilterInput").on("input", function () {
-  const inputValue = $(this).val().toLowerCase();
+  $("#btnClearFilter").attr("disabled", false);
 
-  if (inputValue === "") displayTransactions(listTransactions);
-
+  const inputValue = $("#customerNameFilterInput").val().toLowerCase();
   const filteredTransactions = listTransactions.filter(({ customerName }) =>
     customerName.toLowerCase().includes(inputValue)
   );
 
-  displayTransactions(filteredTransactions);
+  displayTransactionsByName(filteredTransactions);
 });
 
 // * Filter with amount
+let minValue;
+let maxValue;
+$("#minAmountInput").on("change", function () {
+  minValue = parseFloat($("#minAmountInput").val()); //501
+  maxValue = parseFloat($("#maxAmountInput").val()); //3000
 
-$("#minAmountInput, #maxAmountInput").on("change", function () {
-  const minValue = $("#minAmountInput").val();
-  const maxValue = $("#maxAmountInput").val();
+  if (minValue < lowestAmount) {
+    $("#minAmountInput").val(lowestAmount);
+  } else if (minValue >= maxValue) {
+    $("#minAmountInput").val(maxValue - 1);
+  }
 
-  // * prevent the user from entering invalid values
-  minValue < lowestAmount && $("#minAmountInput").val(lowestAmount);
-  minValue >= highestAmount && $("#minAmountInput").val(highestAmount - 1);
+  filterTransactionsByAmount();
+});
 
-  maxValue > highestAmount && $("#maxAmountInput").val(highestAmount);
-  maxValue <= lowestAmount && $("#maxAmountInput").val(lowestAmount + 1);
+$(" #maxAmountInput").on("change", function () {
+  minValue = parseFloat($("#minAmountInput").val());
+  maxValue = parseFloat($("#maxAmountInput").val());
 
-  const filteredTransactions = listTransactions.filter(
-    ({ amount }) => amount >= minValue && amount <= maxValue
-  );
-  displayTransactions(filteredTransactions);
+  if (maxValue > highestAmount) {
+    $("#maxAmountInput").val(highestAmount);
+  } else if (maxValue <= minValue) {
+    $("#maxAmountInput").val(minValue + 1);
+  }
+
+  filterTransactionsByAmount();
+});
+
+// * Clear Filter
+$("#btnClearFilter").on("click", function () {
+  $("#customerNameFilterInput").val("");
+  $("#minAmountInput").val(lowestAmount);
+  $("#maxAmountInput").val(highestAmount);
+  $("#btnClearFilter").attr("disabled", true);
+  displayTransactionsByName(listTransactions);
 });
 
 // & Chart & //
@@ -107,7 +154,7 @@ function generateCustomerOption(customerName) {
     <option value="${customerName}">${customerName}</option>
   `;
 }
-const dummyLabels = ["June", "July", "Aug", "Sep", "Oct", "Nov"];
+const dummyLabels = ["July", "Aug", "Sep", "Oct", "Nov"];
 
 let chartInstance = null;
 function addChart(user, labels, amounts) {
