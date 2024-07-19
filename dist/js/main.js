@@ -43,7 +43,7 @@ function generateTransaction({ id, customerName, date, amount }) {
   return `
     <tr>
       <td>#${id}</td>
-      <td>${customerName}</td>
+      <td class="graph-link">${customerName}</td>
       <td>${date}</td>
       <td>&dollar;${amount}</td>
     </tr>
@@ -73,6 +73,8 @@ function displayTransactionsByName(listTransactions) {
     .join("");
   $("tbody").html(tbodyContent);
 
+  addGraphLinksListeners();
+
   let currentLowestAmount = Infinity;
   let currentHighestAmount = -Infinity;
   listTransactions.forEach(({ amount }) => {
@@ -93,6 +95,7 @@ function displayTransactionsByAmount(listTransactions) {
     .map((transaction) => generateTransaction(transaction))
     .join("");
   $("tbody").html(tbodyContent);
+  addGraphLinksListeners();
 }
 
 // & Filter Table & //
@@ -157,7 +160,18 @@ function generateCustomerOption(customerName) {
 const dummyLabels = ["July", "Aug", "Sep", "Oct", "Nov"];
 
 let chartInstance = null;
-function addChart(user, labels, amounts) {
+function addChart(selectedUser) {
+  const selectedUserTransactions = listTransactions.filter(
+    ({ customerName }) => customerName === selectedUser
+  );
+
+  const selectedUserTransactionsDates = selectedUserTransactions.map(
+    ({ date }) => date
+  );
+  const selectedUserAmounts = selectedUserTransactions.map(
+    ({ amount }) => amount
+  );
+
   const ctx = $("#myChart");
 
   if (chartInstance) {
@@ -167,11 +181,11 @@ function addChart(user, labels, amounts) {
   chartInstance = new Chart(ctx, {
     type: "bar",
     data: {
-      labels: labels,
+      labels: selectedUserTransactionsDates,
       datasets: [
         {
-          label: `Total transactions amount for: ${user}`,
-          data: amounts,
+          label: `Total transactions amount for: ${selectedUser}`,
+          data: selectedUserAmounts,
           borderWidth: 1,
         },
       ],
@@ -190,20 +204,19 @@ addChart("", dummyLabels);
 
 $("#selectedUserSelect").on("input", function () {
   const selectedUser = $(this).val();
-  const selectedUserTransactions = listTransactions.filter(
-    ({ customerName }) => customerName === selectedUser
-  );
 
-  const selectedUserTransactionsDates = selectedUserTransactions.map(
-    ({ date }) => date
-  );
-  const selectedUserAmounts = selectedUserTransactions.map(
-    ({ amount }) => amount
-  );
-  addChart(selectedUser, selectedUserTransactionsDates, selectedUserAmounts);
+  addChart(selectedUser);
 });
 
 // & Dark Mode & //
 $("#darkModeCheckBox").on("change", function () {
   $("html").toggleClass("dark");
 });
+
+function addGraphLinksListeners() {
+  $(".graph-link").on("click", function () {
+    const clickedCustomer = $(this).text();
+    addChart(clickedCustomer);
+    $("#selectedUserSelect").val(clickedCustomer);
+  });
+}
